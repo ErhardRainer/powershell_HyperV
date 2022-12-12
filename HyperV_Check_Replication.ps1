@@ -44,8 +44,6 @@ if ($count -gt 0)
     $SMTPClient.EnableSsl = $true
     $SMTPClient.Credentials = New-Object System.Net.NetworkCredential($config.Settings.EmailSettings.MailUsername, $config.Settings.EmailSettings.MailPassword);
     $SMTPClient.Send($mail)
-
-
 }
 
 ## Try to Resync Hyper-V that are Critical
