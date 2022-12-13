@@ -26,3 +26,12 @@ Dieses Skript dient dazu, wenn der Haupt-HyperV Server über die Dauer von 20 Mi
 (a) ein Mail auszusenden
 (b) am Replication Server die Hyper-V Maschine zu starten
 Wichtig ist, dass nicht nur die virtuelle Maschine sondern der gesamte Haupt-HyperV Server nicht erreichbar ist. 
+
+############ HyperV_VMInformation.ps1
+
+Dieses Skript dient dazu einne Power BI Report über den Status (historisch) der Hyper-V Maschinen aufzubauen.
+Aus diesem Grund wird eine Reihe von Informationen extrahiert. 
+
+Darüberhinaus empfehle ich, die Verwendung Hyper-V Health Reports mit einem kleinen Webserver auf jedem Hyper-V Host, um schnell einen Überblick über die wichtigsten Informationen zu haben. 
+https://gist.github.com/jdhitsolutions/d6ec76a00525f18d87ca27d104ea00bd
+https://jdhitsolutions.com/blog/powershell/7047/my-powershell-hyper-v-health-report/
