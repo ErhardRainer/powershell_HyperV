@@ -1,6 +1,8 @@
 # powershell_HyperV
 diverse Powershell Skripte rund um Hyper-V
 
+ProjektStatus: vorerst abgeschlossen (sollten neue Scripte meinerseits benötigt werden, dann werde ich das Projekt eventuell wieder aufnehmen)
+
 Hierbei handelt es sich um eine Sammlung von Hyper-V Skripten, die den Betrieb eines Hyper-V Servers erleichtern
 
 ############ HyperV_Check_Replication.ps1
