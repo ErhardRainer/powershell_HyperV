@@ -1,18 +1,37 @@
 ﻿<#
-	.NOTES
-	===========================================================================
-	 Created on:   	2021-12-28
-	 Created by:   	Erhard Rainer
-	 Filename:     	HyperV_Check_Replication.ps1
-	===========================================================================
-	.DESCRIPTION
-        Checks Replication Hyper-V
-    .NOTE
-        Change Credentials before Use
-    .VERSION HISTORY
-        2022-01-01 ER Settings from XML
-        2022-01-01 ER also logging to Network Share => for Power BI Report
-        2022-12-13 ER also Start Resyncing
+.SYNOPSIS
+Dieses Skript prüft Hyper-V-Replikationen auf dem lokalen Computer und meldet eventuelle Probleme. Bei Fehlern in der Replikation werden detaillierte Informationen per E-Mail gesendet und ein Versuch zur erneuten Synchronisation kritischer Fälle wird unternommen.
+
+.NAME
+CheckHyperVReplications.ps1
+
+.DESCRIPTION
+Dieses Skript überprüft den Zustand der Hyper-V-Replikationen auf dem lokalen Computer, generiert einen Bericht und sendet diesen bei Bedarf per E-Mail. Es versucht auch, Replikationen im kritischen Zustand automatisch neu zu synchronisieren. Die Konfiguration erfolgt über eine externe XML-Datei.
+
+.AUTHOR
+Erhard Rainer
+http://erhard-rainer.com
+
+.DATE
+2024-04-03
+
+.EXAMPLE
+PS> .\CheckHyperVReplications.ps1
+
+.PARAMETER mysettings.xml
+Die XML-Konfigurationsdatei, die Einstellungen für Replikationslogs, E-Mail-Einstellungen und andere Skriptparameter enthält.
+
+.VERSIONHISTORY
+2021-11-15 - 1.0 - Erstveröffentlichung
+2022-01-01 ER Settings from XML
+2022-01-01 ER also logging to Network Share => for Power BI Report
+2022-12-13 ER also Start Resyncing
+
+.IMPORTANT
+Change Credentials before Use. Checks Replication Hyper-V and attempts to resync critical replication states.
+
+.NOTES
+Lizenz: Creative Commons Attribution 4.0 International License (CC BY 4.0)
 #>
 
 Write-Host "-------------------------------------------------------"
