@@ -6,6 +6,7 @@ ProjektStatus: vorerst abgeschlossen (sollten neue Scripte meinerseits benötigt
 Hierbei handelt es sich um eine Sammlung von Hyper-V Skripten, die den Betrieb eines Hyper-V Servers erleichtern
 
 ## [CheckHyperVReplications.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_Check_Replication.ps1)
+Näheres in diesem [Blog-Artikel](https://erhard-rainer.com/2021-12/hyper-v-replication/)
 ### Kurzbeschreibung
 Das PowerShell-Skript `CheckHyperVReplications.ps1` dient der Überwachung und Verwaltung von Hyper-V-Replikationen auf dem lokalen Computer. Es erkennt Probleme in den Replikationen, sendet detaillierte Berichte per E-Mail und versucht, kritische Replikationszustände neu zu synchronisieren. Die Konfiguration des Skripts erfolgt über eine externe XML-Datei.
 ### Voraussetzungen
@@ -31,7 +32,9 @@ Starten des Skripts ohne spezifische Parameter (nutzt Einstellungen aus der `mys
 ### Wichtige Hinweise
 - Vor der Verwendung sollten die Anmeldeinformationen in der XML-Konfigurationsdatei angepasst werden.
 - Das Skript zielt darauf ab, den Zustand der Hyper-V-Replikation zu überprüfen und kritische Zustände zu beheben.
+# Hyper-V starten
 ## [HyperV_restart.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_restart.ps1)
+näheres dazu in diesem [Blog-Artikel](https://erhard-rainer.com/2021-12/hyper-v-restart-if-not-running/)
 ### Kurzbeschreibung
 Dieses PowerShell-Skript gewährleistet, dass ausgewählte Hyper-V VMs immer in Betrieb sind und verschickt bei einem Neustart Benachrichtigungen per E-Mail. Es überprüft periodisch den Zustand der angegebenen VMs und führt einen Neustart durch, sollten diese nicht aktiv sein. Für die E-Mail-Benachrichtigungen können Konfigurationen aus einer optionalen XML-Datei geladen werden.
 ### Voraussetzungen
@@ -52,6 +55,9 @@ Ausführung des Skripts, um die VMs 'MS BI' und 'SQL Server' zu überwachen und 
 ### Versionshistorie
 - 2021-12-23 - 1.0 - Erstveröffentlichung und E-Mail Versand bei Restart der VM.
 - 2024-04-03 - 1.1 - Integration der Einstellungen aus XML-Datei.
+## mehrere Hyper-Vs auf unterschiedlichen Servern starten
+Der [Artikel](https://erhard-rainer.com/2014-03/mehrere-virtuelle-maschinen-auf-unterschiedlichen-hyper-v-hosts-starten/) beschreibt ein PowerShell-Skript, mit dem mehrere virtuelle Maschinen (VMs) auf verschiedenen Hyper-V-Hosts in einer vordefinierten Reihenfolge automatisch gestartet werden können. Dieses Verfahren wird insbesondere in Entwicklungs- oder Testumgebungen nützlich, wo verschiedene VMs zusammenarbeiten müssen. Das Skript nutzt zwei Arrays, um Hyper-V-Hosts und VM-Namen zu definieren, überprüft die Verfügbarkeit jeder VM auf den angegebenen Hosts und startet die VMs, die nicht bereits laufen. Eine praktische Lösung für Umgebungen mit verteilten Ressourcen.
+# Hyper-V Export & Import
 ## [HyperV_Import.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_Import.ps1)
 ### Kurzbeschreibung
 Dieses PowerShell-Skript ermöglicht das Importieren einer oder mehrerer virtueller Maschinen (VMs) aus einem Backup-Verzeichnis oder das Auflisten aller in diesem Verzeichnis verfügbaren VMs. Es bietet Optionen für die Nutzung von Standardpfaden, falls keine spezifischen Pfade angegeben sind. Die Funktionalität wird über den Parameter `-Type` gesteuert.
@@ -102,6 +108,7 @@ Durchführung eines Live-Exports der VMs in ein spezifisches Backup- und tempor�
 > .\VMBackup.ps1 -BackupPath "\\192.168.0.200\Backup\HyperV" -TmpExport "c:\TempBackup" -ExportType 1
 ### Versionshistorie
 - 1.0 - Initiale Version
+# virtuelle Festplatten
 ## [MergeVHDs.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/MergeVHDs.ps1)
 ### Kurzbeschreibung
 Dieses PowerShell-Skript durchläuft ein spezifiziertes Verzeichnis, um alle .avhdx (Differenzierungs-) und .vhdx (virtuelle Festplatten-) Dateien basierend auf ihrer Eltern-Kind-Beziehung zu zusammenzuführen. Optional wird zuvor eine Sicherungskopie der Originaldateien erstellt.
@@ -118,6 +125,12 @@ Das Skript nimmt den Pfad zum Verzeichnis mit den zu zusammenführenden Dateien 
 ### Beispiele
 Zusammenführen von VHDX und AVHDX Dateien in einem spezifizierten Verzeichnis nach Erstellung einer Sicherungskopie:
 > .\MergeVHDs.ps1 -directoryPath "C:\Pfad\Zum\Verzeichnis"
+## weiterführender Artikel
+Der [Artikel](https://erhard-rainer.com/2012-09/hyper-v-vhd-dateien-zusammenfuhren/) bietet verschiedene Ansätze, um Hyper-V VHD-Dateien zusammenzuführen, darunter das Entfernen von Snapshots über Hyper-V und eine Komprimierung, die Verwendung eines Videos als Anleitung zum Zusammenführen sowie eine PowerShell-Lösung mit der Merge VHD Funktion. Letztere nutzt die Msvm_ImageManagementService WMI-Klasse, um die Dateien zu verschmelzen, wobei der Fortschritt überwacht wird. Es wird auch die Idee angesprochen, aus einem Snapshot einen lauffähigen Klon zu erstellen.
+# Snapshots
+## HyperV Snapshots
+Der Artikel ERSTELLUNG EINER LISTE VON HYPER-V SNAPSHOTS UND GENERIERUNG LAUFFÄHIGER MASCHINEN AUS SNAPSHOTS MITTELS POWERSHELL(https://erhard-rainer.com/2023-11/erstellung-einer-liste-von-hyper-v-snapshots-und-generierung-lauffahiger-maschinen-aus-snapshots-mittels-powershell/) beschreibt, wie man mit PowerShell eine Liste von Hyper-V Snapshots erstellt und daraus lauffähige Maschinen generiert. Er bietet Einblicke in die Funktionsweise von Hyper-V und Snapshots, zeigt Schritte zum Auflisten von Snapshots mittels PowerShell und erläutert, wie aus einem Snapshot eine neue VM erstellt werden kann, indem die Original-VM dupliziert und der Snapshot auf diese Kopie angewendet wird. Der Artikel betont die Bedeutung von Anpassungen und Vorbereitungen wie Speicherplatzprüfung und Berechtigungen, um Netzwerkkonflikte und Lizenzierungsprobleme zu vermeiden.
+siehe dazu auch [hier](https://erhard-rainer.com/2021-11/hyper-v-checkpoints/)
 
 ## HyperV_VMInformation.ps1 (comming soon)
 
