@@ -1,10 +1,6 @@
 # powershell_HyperV
-diverse Powershell Skripte rund um Hyper-V
-
-ProjektStatus: vorerst abgeschlossen (sollten neue Scripte meinerseits benötigt werden, dann werde ich das Projekt eventuell wieder aufnehmen)
-
 Hierbei handelt es sich um eine Sammlung von Hyper-V Skripten, die den Betrieb eines Hyper-V Servers erleichtern
-
+# Replikation / Replication
 ## [CheckHyperVReplications.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_Check_Replication.ps1)
 Näheres in diesem [Blog-Artikel](https://erhard-rainer.com/2021-12/hyper-v-replication/)
 ### Kurzbeschreibung
@@ -129,7 +125,7 @@ Zusammenführen von VHDX und AVHDX Dateien in einem spezifizierten Verzeichnis n
 Der [Artikel](https://erhard-rainer.com/2012-09/hyper-v-vhd-dateien-zusammenfuhren/) bietet verschiedene Ansätze, um Hyper-V VHD-Dateien zusammenzuführen, darunter das Entfernen von Snapshots über Hyper-V und eine Komprimierung, die Verwendung eines Videos als Anleitung zum Zusammenführen sowie eine PowerShell-Lösung mit der Merge VHD Funktion. Letztere nutzt die Msvm_ImageManagementService WMI-Klasse, um die Dateien zu verschmelzen, wobei der Fortschritt überwacht wird. Es wird auch die Idee angesprochen, aus einem Snapshot einen lauffähigen Klon zu erstellen.
 # Snapshots
 ## HyperV Snapshots
-Der Artikel ERSTELLUNG EINER LISTE VON HYPER-V SNAPSHOTS UND GENERIERUNG LAUFFÄHIGER MASCHINEN AUS SNAPSHOTS MITTELS POWERSHELL(https://erhard-rainer.com/2023-11/erstellung-einer-liste-von-hyper-v-snapshots-und-generierung-lauffahiger-maschinen-aus-snapshots-mittels-powershell/) beschreibt, wie man mit PowerShell eine Liste von Hyper-V Snapshots erstellt und daraus lauffähige Maschinen generiert. Er bietet Einblicke in die Funktionsweise von Hyper-V und Snapshots, zeigt Schritte zum Auflisten von Snapshots mittels PowerShell und erläutert, wie aus einem Snapshot eine neue VM erstellt werden kann, indem die Original-VM dupliziert und der Snapshot auf diese Kopie angewendet wird. Der Artikel betont die Bedeutung von Anpassungen und Vorbereitungen wie Speicherplatzprüfung und Berechtigungen, um Netzwerkkonflikte und Lizenzierungsprobleme zu vermeiden.
+Der Artikel [ERSTELLUNG EINER LISTE VON HYPER-V SNAPSHOTS UND GENERIERUNG LAUFFÄHIGER MASCHINEN AUS SNAPSHOTS MITTELS POWERSHELL](https://erhard-rainer.com/2023-11/erstellung-einer-liste-von-hyper-v-snapshots-und-generierung-lauffahiger-maschinen-aus-snapshots-mittels-powershell/) beschreibt, wie man mit PowerShell eine Liste von Hyper-V Snapshots erstellt und daraus lauffähige Maschinen generiert. Er bietet Einblicke in die Funktionsweise von Hyper-V und Snapshots, zeigt Schritte zum Auflisten von Snapshots mittels PowerShell und erläutert, wie aus einem Snapshot eine neue VM erstellt werden kann, indem die Original-VM dupliziert und der Snapshot auf diese Kopie angewendet wird. Der Artikel betont die Bedeutung von Anpassungen und Vorbereitungen wie Speicherplatzprüfung und Berechtigungen, um Netzwerkkonflikte und Lizenzierungsprobleme zu vermeiden.
 siehe dazu auch [hier](https://erhard-rainer.com/2021-11/hyper-v-checkpoints/)
 
 ## HyperV_VMInformation.ps1 (comming soon)
