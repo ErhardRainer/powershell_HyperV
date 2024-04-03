@@ -5,8 +5,7 @@ ProjektStatus: vorerst abgeschlossen (sollten neue Scripte meinerseits benötigt
 
 Hierbei handelt es sich um eine Sammlung von Hyper-V Skripten, die den Betrieb eines Hyper-V Servers erleichtern
 
-## [CheckHyperVReplications.ps1]((https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_Check_Replication.ps1))
-
+## [CheckHyperVReplications.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_Check_Replication.ps1)
 ### Kurzbeschreibung
 Das PowerShell-Skript `CheckHyperVReplications.ps1` dient der Überwachung und Verwaltung von Hyper-V-Replikationen auf dem lokalen Computer. Es erkennt Probleme in den Replikationen, sendet detaillierte Berichte per E-Mail und versucht, kritische Replikationszustände neu zu synchronisieren. Die Konfiguration des Skripts erfolgt über eine externe XML-Datei.
 ### Voraussetzungen
@@ -32,7 +31,7 @@ Starten des Skripts ohne spezifische Parameter (nutzt Einstellungen aus der `mys
 ### Wichtige Hinweise
 - Vor der Verwendung sollten die Anmeldeinformationen in der XML-Konfigurationsdatei angepasst werden.
 - Das Skript zielt darauf ab, den Zustand der Hyper-V-Replikation zu überprüfen und kritische Zustände zu beheben.
-## [HyperV_restart.ps1] (https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_restart.ps1)
+## [HyperV_restart.ps1](https://github.com/ErhardRainer/powershell_HyperV/blob/main/HyperV_restart.ps1)
 ### Kurzbeschreibung
 Dieses PowerShell-Skript gewährleistet, dass ausgewählte Hyper-V VMs immer in Betrieb sind und verschickt bei einem Neustart Benachrichtigungen per E-Mail. Es überprüft periodisch den Zustand der angegebenen VMs und führt einen Neustart durch, sollten diese nicht aktiv sein. Für die E-Mail-Benachrichtigungen können Konfigurationen aus einer optionalen XML-Datei geladen werden.
 ### Voraussetzungen
