@@ -1,17 +1,46 @@
-﻿# Pfad, an dem die VMs gesichert werden sollen
-$BackupPath = "\\192.168.0.185\Backup\HyperV"
-# Temporäres lokales Verzeichnis für den Export
-$tmpExport = "f:\Backup"
-# Exporttyp definieren: 1 = Live-Export, 2 = Überspringen wenn läuft, 3 = Herunterfahren, Exportieren, Hochfahren
-$exportType = 2
+﻿<#
+.SYNOPSIS
+Backup-Skript für Hyper-V VMs, das die VMs je nach Konfiguration live exportiert, bei laufendem Betrieb überspringt oder herunterfährt, exportiert und wieder hochfährt.
+
+.DESCRIPTION
+Dieses Skript führt ein Backup von Hyper-V VMs durch, wobei der Backup-Prozess basierend auf den übergebenen Parametern konfiguriert wird. Es unterstützt Live-Export, Überspringen laufender VMs oder Herunterfahren der VMs vor dem Export.
+
+.PARAMETER BackupPath
+Der Netzwerkpfad, an dem die VMs gesichert werden sollen. Standard ist "\\192.168.0.185\Backup\HyperV".
+
+.PARAMETER TmpExport
+Das temporäre lokale Verzeichnis für den Export. Standard ist "f:\Backup".
+
+.PARAMETER ExportType
+Der Exporttyp. Mögliche Werte sind 1 für Live-Export, 2 für Überspringen, wenn VM läuft, und 3 für Herunterfahren, Exportieren, Hochfahren. Standard ist 2.
+
+.EXAMPLE
+PS> .\VMBackup.ps1 -BackupPath "\\192.168.0.200\Backup\HyperV" -TmpExport "c:\TempBackup" -ExportType 1
+
+.AUTHOR
+Erhard Rainer
+http://erhard-rainer.com
+
+.VERSIONHISTORY
+1.0 - Initial Version
+
+.NOTES
+Lizenz: Creative Commons Attribution 4.0 International License (CC BY 4.0)
+#>
+
+param(
+    [string]$BackupPath = "\\192.168.0.185\Backup\HyperV",
+    [string]$TmpExport = "f:\Backup",
+    [int]$ExportType = 2
+)
 
 # Stellen Sie sicher, dass das finale und temporäre Verzeichnis existiert
 if (-not (Test-Path $BackupPath)) {
     Write-Error "Das finale Backup-Verzeichnis '$BackupPath' existiert nicht."
     exit
 }
-if (-not (Test-Path $tmpExport)) {
-    New-Item -Path $tmpExport -ItemType Directory
+if (-not (Test-Path $TmpExport)) {
+    New-Item -Path $TmpExport -ItemType Directory
 }
 
 # Alle VMs abrufen
@@ -24,64 +53,46 @@ foreach ($vm in $vms) {
         continue
     }
 
-    # Überprüfen, ob die VM läuft
-    $vmRunning = $vm.State -eq 'Running'
-
-    # Datum der letzten Änderung an den VHDs/VHDXs ermitteln
-    $vhds = Get-VMHardDiskDrive -VMName $vm.Name
+    $vmRunning = $vm.State -eq 'Running' # Überprüfen, ob die VM läuft
+    $vhds = Get-VMHardDiskDrive -VMName $vm.Name # Datum der letzten Änderung an den VHDs/VHDXs ermitteln
     $latestVHDChangeDate = ($vhds | ForEach-Object {
-        if (Test-Path $_.Path) {
-            (Get-Item $_.Path).LastWriteTime
-        } else {
-            [datetime]::MinValue
-        }
+        (Get-Item $_.Path).LastWriteTime
     } | Measure-Object -Maximum).Maximum
 
-    # Prüfen, ob ein Backup-Verzeichnis für die VM existiert und das Datum des letzten Exports ermitteln
+    # Prüfen, ob ein Backup-Verzeichnis für die VM existiert
     $lastExportPath = Get-ChildItem -Path $BackupPath -Directory | Where-Object { $_.Name -match "^$($vm.Name)_" } | Sort-Object CreationTime -Descending | Select-Object -First 1
-    if ($lastExportPath) {
-        $lastExportDate = $lastExportPath.CreationTime
-    } else {
-        $lastExportDate = [datetime]::MinValue
-    }
+    $lastExportDate = if ($lastExportPath) { $lastExportPath.CreationTime } else { [datetime]::MinValue }
 
-    # Prüfen, ob das Datum der letzten Änderung neuer ist als das Datum des letzten Exports
     if ($latestVHDChangeDate -le $lastExportDate) {
         Write-Host "VM $($vm.Name) hat keine neuen Änderungen seit dem letzten Backup. Überspringe Export."
         continue
     }
 
-    # Temporäres Exportverzeichnis für diese spezielle VM
-    $vmTmpExportPath = Join-Path -Path $tmpExport -ChildPath $vm.Name
+    $vmTmpExportPath = Join-Path -Path $TmpExport -ChildPath $vm.Name # Temporäres Exportverzeichnis
 
-    # Exportieren der VM ins temporäre Verzeichnis
-    Write-Host "Exportiere VM: $($vm.Name) nach $vmTmpExportPath"
+    # Exportieren der VM
     Export-VM -VM $vm -Path $vmTmpExportPath
+    Write-Host "Exportiere VM: $($vm.Name) nach $vmTmpExportPath"
 
-    # Kopieren der exportierten VM zum endgültigen Netzwerkshare
-    Write-Host "Kopiere exportierte VM nach $BackupPath"
+    # Kopieren der exportierten VM
     $vmFinalExportPath = Join-Path -Path $BackupPath -ChildPath $vm.Name
     Copy-Item -Path $vmTmpExportPath -Destination $vmFinalExportPath -Recurse -Force
+    Write-Host "Kopiere exportierte VM nach $BackupPath"
 
-    # Größe der Dateien im temporären Verzeichnis berechnen
+    # Größenvergleich und Bereinigung
     $tempSize = (Get-ChildItem -Path $vmTmpExportPath -Recurse | Measure-Object -Property Length -Sum).Sum
-
-    # Größe der Dateien im finalen Verzeichnis berechnen
     $finalSize = (Get-ChildItem -Path $vmFinalExportPath -Recurse | Measure-Object -Property Length -Sum).Sum
-
-    # Überprüfen, ob die Größen übereinstimmen
     if ($tempSize -eq $finalSize) {
         Write-Host "Überprüfung erfolgreich: Die Größe der Dateien stimmt überein. Bereinigung wird durchgeführt."
-        # Aufräumen des temporären Verzeichnisses
         Remove-Item -Path $vmTmpExportPath -Recurse -Force
     } else {
-        Write-Host "Warnung: Die Größe der Dateien im temporären Verzeichnis und im finalen Verzeichnis stimmt nicht überein. Bereinigung wird nicht durchgeführt."
+        Write-Host "Warnung: Die Größe der Dateien stimmt nicht überein. Bereinigung wird nicht durchgeführt."
     }
 
     # VM nach dem Export neu starten, falls erforderlich
-    if ($exportType -eq 3 -and $vmRunning) {
-        Write-Host "Starte VM $($vm.Name) nach dem Export neu."
+    if ($ExportType -eq 3 -and $vmRunning) {
         Start-VM -Name $vm.Name
+        Write-Host "Starte VM $($vm.Name) nach dem Export neu."
     }
 }
 

@@ -13,7 +13,7 @@ http://erhard-rainer.com
 2024-04-04
 
 .EXAMPLE
-PS> .\HyperV_Import.ps1 -Type Import
+PS> .\HyperV_Import.ps1 -Type Import -ImportPath "\\192.168.0.185\Backup\HyperV\"
 
 .EXAMPLE
 PS> .\HyperV_Import.ps1 -Type List -ImportPath "\\192.168.0.185\Backup\HyperV\"
